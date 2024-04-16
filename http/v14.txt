@@ -1,0 +1,95 @@
+Q1. 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+class Q1 extends Thread {
+    private File file;
+    private String searchString;
+
+    public Q1(File file, String searchString) {
+        this.file = file;
+        this.searchString = searchString;
+    }
+
+    @Override
+    public void run() {
+        try {
+            searchInFile(file, searchString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void searchInFile(File file, String searchString) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        int lineNumber = 0;
+        while ((line = reader.readLine()) != null) {
+            lineNumber++;
+            if (line.contains(searchString)) {
+                System.out.println("Found in file: " + file.getName() + ", Line: " + lineNumber + ", Content: " + line);
+            }
+        }
+        reader.close();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        String searchString = "your_search_string"; 
+        File currentFolder = new File(".");
+        File[] files = currentFolder.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().endsWith(".txt")) {
+                    Q1 se = new se(file, searchString);
+                    Q1.start();
+                }
+            }
+        }
+    }
+}
+
+Q2. 
+JSP Code
+<%@page language="java"%>
+
+<html>
+<body>
+<%! int n,rem,r; %>
+<% n=Integer.parseInt(request.getParameter("num"));
+      if(n<10)
+     {     
+       out.println("Sum of first and last digit is   ");
+%><font size=18 color=red><%= n %></font>
+<%
+     }
+    else
+    {
+      rem=n%10;
+      do{
+                 r=n%10;
+                 n=n/10;
+            }while(n>0);
+         n=rem+r;
+        out.println("Sum of first and last digit is    ");
+%><font size=18 color=red><%= n %></font>
+<%
+     }
+%>
+</body>
+</html>
+
+HTML code
+<html>
+<body>
+<form method=post action="Q2.jsp">
+Enter Any Number : <Input type=text name=num><br><br>
+<input type=submit value=Display>
+</form>
+</body>
+</html>
+

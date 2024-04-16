@@ -1,0 +1,53 @@
+Q1.
+<%@page language"="java""import="java.sql.*""%>
+<html><body>
+<%
+class.forName("org.postgresql.Driver");
+Connection c1=DriverManager.getConnection("jdbc:postgresql://localhost:8080/mydb","postgres","123");
+Statement s=c1.creaQ2atement();
+Resultset rs=s.executeQuery("select * from patient");
+%>
+<table"border="2">
+<tr><th>Patient"NO</th><th>Name</th><th>address</th><th>age</th><th>disease</th></tr>
+<% while(rs.next())
+{%>
+<td><%out.println(rs.getInt(1));%></td>
+<td><%out.println(rs.getString(2));%></td>
+<td><%out.println(rs.getString(3));%></td>
+<td><%out.println(rs.getInt(4));%></td>
+<td><%out.println(rs.getString(5));%></td>
+<%
+}
+%>
+</body>
+</html>
+
+Q2. 
+import java.util.LinkedList;
+import java.util.ListIterator;
+
+class Q2 {
+    Q2() {
+    }
+
+    public static void main(String[] var0) {
+        LinkedList a1 = new LinkedList();
+        a1.add("first");
+        a1.add("second");
+        a1.add("third");
+        System.out.println("Current list element" + a1);
+        a1.addLast("Five");
+        a1.removeFirst();
+        System.out.println("After updation" + a1);
+        ListIterator a2 = a1.listIterator();
+
+        while(a2.hasNext()) {
+            a2.next();
+        }
+
+        while(a2.hasPrevious()) {
+            System.out.println(a2.previous());
+        }
+    }
+}
+

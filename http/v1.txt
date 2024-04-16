@@ -1,0 +1,93 @@
+Q1.
+public class Q1 extends Thread {
+    @Override
+    public void run() {
+        for (char ch = 'A'; ch <= 'Z'; ch++) {
+            System.out.print(ch + " ");
+            try {
+                Thread.sleep(2000); 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        s1_1 at = new s1_1();
+        at.start();
+    }
+}
+
+Q2. 
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+
+public class Q2 extends Frame implements ActionListener {
+    Label l1, l2, l3;
+    TextField t1, t2, t3;
+    Button b;
+    Connection cn;
+    Statement st;
+    //ResultSet rs;
+    public Q2()
+    {
+        setLayout(null);
+        l1=new Label("Employee Number: ");
+        l2=new Label("Employee Name: ");
+        l3=new Label("Salary: ");
+        t1=new TextField();
+        t2=new TextField();
+        t3=new TextField();
+        b=new Button("Save");
+        l1.setBounds(50,50,100,30);
+        t1.setBounds(160,50,100,30);
+        l2.setBounds(50,90,100,30);
+        t2.setBounds(160,90,100,30);
+        l3.setBounds(50,130,100,30);
+        t3.setBounds(160,130,100,30);
+        b.setBounds(50,170,100,30);
+        add(l1);
+        add(t1);
+        add(l2);
+        add(t2);
+        add(l3);
+        add(t3);
+        add(b);
+        b.addActionListener(this);
+        setSize(500,500);
+        setVisible(true);
+    }
+    public void actionPerformed(ActionEvent oe)
+    {
+        String str=oe.getActionCommand();
+        if(str.equals("Save"))
+        {
+            try
+            {
+                Class.forName("org.postgresql.Driver");
+                cn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/EMP","postgres","123456");
+
+                st =cn.createStatement();
+                int en=Integer.parseInt(t1.getText());
+                String enn=t2.getText();
+                int sal=Integer.parseInt(t3.getText());
+                String str1 = "insert into emp values('"+ en + "' ,'" + enn + "','" + sal +"')";
+                int k=st.executeUpdate(str1);
+
+                if(k>0)
+                {
+                    JOptionPane.showMessageDialog(null,"Record Is Added");
+                }
+            }
+            catch(Exception er)
+            {
+                System.out.println("Error");
+            }
+        }
+    }
+    public static void main(String[] args) {
+        new Q2();
+    }
+}

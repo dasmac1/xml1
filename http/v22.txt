@@ -1,0 +1,150 @@
+Q1.
+import java.sql.*;
+
+public class EmployeeManagement {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+
+    public static void main(String[] args) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+            Statement stmt = conn.createStatement();
+            createTable(stmt);
+
+            int choice;
+            do {
+                System.out.println("\nMenu:");
+                System.out.println("1. Insert");
+                System.out.println("2. Update");
+                System.out.println("3. Display");
+                System.out.println("4. Exit");
+                System.out.print("Enter your choice: ");
+                choice = Integer.parseInt(System.console().readLine());
+
+                switch (choice) {
+                    case 1:
+                        insertEmployee(conn);
+                        break;
+                    case 2:
+                        updateEmployee(conn);
+                        break;
+                    case 3:
+                        displayEmployees(stmt);
+                        break;
+                    case 4:
+                        System.out.println("Exiting program.");
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                }
+            } while (choice != 4);
+
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void createTable(Statement stmt) throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS Employee (" +
+                     "ENo INT PRIMARY KEY," +
+                     "EName VARCHAR(50)," +
+                     "Salary DECIMAL(10,2))";
+        stmt.executeUpdate(sql);
+    }
+
+    private static void insertEmployee(Connection conn) throws SQLException {
+        System.out.println("\nInserting new employee:");
+
+        System.out.print("Enter Employee Number: ");
+        int eno = Integer.parseInt(System.console().readLine());
+
+        System.out.print("Enter Employee Name: ");
+        String ename = System.console().readLine();
+
+        System.out.print("Enter Employee Salary: ");
+        double salary = Double.parseDouble(System.console().readLine());
+
+        String sql = "INSERT INTO Employee (ENo, EName, Salary) VALUES (?, ?, ?)";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, eno);
+        pstmt.setString(2, ename);
+        pstmt.setDouble(3, salary);
+        pstmt.executeUpdate();
+
+        System.out.println("Employee inserted successfully.");
+    }
+
+    private static void updateEmployee(Connection conn) throws SQLException {
+        System.out.println("\nUpdating employee salary:");
+
+        System.out.print("Enter Employee Number: ");
+        int eno = Integer.parseInt(System.console().readLine());
+
+        System.out.print("Enter new Salary: ");
+        double salary = Double.parseDouble(System.console().readLine());
+
+        String sql = "UPDATE Employee SET Salary = ? WHERE ENo = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setDouble(1, salary);
+        pstmt.setInt(2, eno);
+        int rowsUpdated = pstmt.executeUpdate();
+
+        if (rowsUpdated > 0) {
+            System.out.println("Employee salary updated successfully.");
+        } else {
+            System.out.println("Employee not found with ENo: " + eno);
+        }
+    }
+
+    private static void displayEmployees(Statement stmt) throws SQLException {
+        System.out.println("\nEmployee details:");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Employee");
+        while (rs.next()) {
+            int eno = rs.getInt("ENo");
+            String ename = rs.getString("EName");
+            double salary = rs.getDouble("Salary");
+            System.out.println("ENo: " + eno + ", EName: " + ename + ", Salary: " + salary);
+        }
+        rs.close();
+    }
+}
+
+Q2.
+HTML Code
+<HTML>
+<HEAD>
+<TITLE> 4.JSP SET B:1 </TITLE>
+</HEAD>
+<BODY>
+<form action="http://localhost:8080/jsp/Q2.jsp" method="POST">
+Enter the user name:
+<input type="text" name="a">
+<br><br>
+<input type="Submit" value="Submit"/>
+</form>   
+</BODY>
+</HTML>
+
+JSP Code
+<%@ page language="java" import="java.util.*" %>
+<%
+  String name,date;
+  name=request.getParameter("a");
+  Date d=new Date();
+  date=d.toLocaleString();
+  String s[]=date.split(" ");
+  out.println(" Current date and time is:"+date);
+  if(d.getHours() < 12 && s[4].equals("AM"))
+    out.println("<br>Good Morning "+name);
+  else
+  if(d.getHours()==12 && s[4].equals("PM"))
+    out.println("<br>Good Afternoon "+name);
+  else
+  if(d.getHours()<6 && s[4].equals("PM"))
+    out.println("<br>Good Afternoon "+name);
+  else
+  if(d.getHours()>=6 && s[4].equals("PM"))
+    out.println("<br>Good Evening "+name);
+%>

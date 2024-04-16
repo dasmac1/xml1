@@ -1,0 +1,75 @@
+Q1.
+import java.sql.*;
+
+public class DeleteEmployee {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java DeleteEmployee <employee_id>");
+            System.exit(1);
+        }
+
+        int eno = Integer.parseInt(args[0]);
+
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+            String sql = "DELETE FROM Employee WHERE ENo = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, eno);
+
+            int rowsDeleted = pstmt.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Employee with ID " + eno + " deleted successfully.");
+            } else {
+                System.out.println("No employee found with ID " + eno + ".");
+            }
+
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Q2.
+HTML Code
+<html>
+<body>
+<form method=post action="slip7-1.jsp">
+Enter Any Number : <Input type=text name=num><br><br>
+<input type=submit value=Display>
+</form>
+</body>
+</html>
+
+JSP Code
+<%@page language="java"%>
+
+<html>
+<body>
+<%! int n,rem,r; %>
+<% n=Integer.parseInt(request.getParameter("num"));
+      if(n<10)
+     {     
+       out.println("Sum of first and last digit is   ");
+%><font size=18 color=red><%= n %></font>
+<%
+     }
+    else
+    {
+      rem=n%10;
+      do{
+                 r=n%10;
+                 n=n/10;
+            }while(n>0);
+         n=rem+r;
+        out.println("Sum of first and last digit is    ");
+%><font size=18 color=red><%= n %></font>
+<%
+     }
+%>
+</body>
+</html>

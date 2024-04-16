@@ -1,0 +1,106 @@
+Q1.
+import java.util.*;
+class Square extends Thread
+{
+ int x;
+ Square(int n)
+ {
+ x = n;
+ }
+ public void run()
+ {
+ int sqr = x * x;
+ System.out.println("Square of " + x + " = " + sqr );
+ }
+}
+class Cube extends Thread
+{
+ int x;
+ Cube(int n)
+ {
+ x = n;
+ }
+ public void run()
+ {
+ int cub = x * x * x;
+ System.out.println("Cube of " + x + " = " + cub );
+ }
+}
+class Number extends Thread
+{
+ public void run()
+ {
+ Random random = new Random();
+ for(int i =0; i<10; i++)
+ {
+ int r = random.nextInt(100);
+ System.out.println("Random Integer generated : " + r);
+
+  if(r%2==0)
+{
+ Square s = new Square(r);
+ s.start();
+}
+else
+{
+ Cube c = new Cube(r);
+ c.start();
+}
+ try {
+ Thread.sleep(1000);
+
+ } catch (InterruptedException ex)
+ {
+ System.out.println(ex);
+}
+ }
+ }
+}
+class Q1 {
+ public static void main(String args[])
+ {
+ Number n = new Number();
+ n.start();
+ }
+}
+
+Q2.
+import java.sql.*;
+class Q2
+{
+            public static void main(String args[])
+            {           
+                        try
+                        {
+                                    Class.forName("org.postgresql.Driver");
+                Connection  con=DriverManager.getConnection("jdbc:postgresql://localhost:5432/product","postgres","123456");
+                                      System.out.println("Connection Established...");
+
+                                    Statement stmt=con.createStatement();
+
+String query="create table product"+"(pid int ,"+" pname varchar(20),"+" price int)";
+                                    stmt.executeUpdate(query);
+                                    System.out.println("given table created in database");
+                           stmt.executeUpdate("insert into product "+"values(101,'pen',10)");
+                               stmt.executeUpdate("insert into product "+"values(102,'pencil',5)");
+                                stmt.executeUpdate("insert into product "+"values(103,'eraser',10)");
+                                 stmt.executeUpdate("insert into product "+"values(104,'scale',20)");
+							stmt.executeUpdate("insert into  product "+"values(105,'book',30)");
+                                    System.out.println("Succesfully inserted in table....");
+
+                                    ResultSet rs=stmt.executeQuery("select * from product");
+                                    System.out.println("Pid\t"+"Pname\t"+"price\t");
+                                    while(rs.next())
+                                    {
+  System.out.println("\n"+rs.getInt(1)+"\t"+rs.getString(2)+"\t"+rs.getInt(3));
+                                    }
+
+                        }          
+                        catch(Exception e)
+                        {
+                                    
+                        }
+            }
+}
+
+

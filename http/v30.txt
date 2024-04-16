@@ -1,0 +1,117 @@
+Q1.
+import javax.swing.*;
+import java.awt.*;
+
+public class test extends JFrame {
+    private static final int WIDTH = 900;
+    private static final int HEIGHT = 600;
+
+    public test() {
+        setTitle("Indian Flag");
+        setSize(WIDTH, HEIGHT);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        FlagPanel flagPanel = new FlagPanel();
+        add(flagPanel);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(test::new);
+    }
+}
+
+class FlagPanel extends JPanel {
+    private static final int WIDTH = 900;
+    private static final int HEIGHT = 600;
+
+    public FlagPanel() {
+        setBackground(Color.WHITE);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        drawIndianFlag(g);
+    }
+
+    private void drawIndianFlag(Graphics g) {
+        int height = HEIGHT / 3;
+        g.setColor(Color.ORANGE);
+        g.fillRect(0, 0, WIDTH, height);
+
+        g.setColor(Color.WHITE);
+        g.fillRect(0, height, WIDTH, height);
+
+        g.setColor(new Color(18, 136, 7));
+        g.fillRect(0, 2 * height, WIDTH, height); 
+
+        drawAshokaChakra(g, WIDTH / 2, height * 2 + height / 2);
+    }
+
+    private void drawAshokaChakra(Graphics g, int x, int y) {
+        int diameter = HEIGHT / 3;
+        int radius = diameter / 2;
+        int numSpokes = 24;
+
+        g.setColor(Color.NAVY);
+        g.fillOval(x - radius, y - radius, diameter, diameter);
+
+        double angle = 0;
+        double angleIncrement = 2 * Math.PI / numSpokes;
+        int outerX, outerY;
+        for (int i = 0; i < numSpokes; i++) {
+            outerX = (int) (x + radius * Math.cos(angle));
+            outerY = (int) (y + radius * Math.sin(angle));
+            g.drawLine(x, y, outerX, outerY);
+            angle += angleIncrement;
+        }
+
+        int centerDiameter = diameter / 5;
+        int centerRadius = centerDiameter / 2;
+        g.setColor(Color.NAVY);
+        g.fillOval(x - centerRadius, y - centerRadius, centerDiameter, centerDiameter);
+
+        int smallCircleDiameter = (int) (centerDiameter / Math.sqrt(2));
+        int smallCircleRadius = smallCircleDiameter / 2;
+        for (int i = 0; i < numSpokes; i++) {
+            outerX = (int) (x + centerRadius * Math.cos(angle));
+            outerY = (int) (y + centerRadius * Math.sin(angle));
+            g.fillOval(outerX - smallCircleRadius, outerY - smallCircleRadius, smallCircleDiameter, smallCircleDiameter);
+            angle += angleIncrement;
+        }
+    }
+}
+
+Q2.
+import java.sql.*;
+public class ScrollableResultSetExample {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+
+    public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+
+            String sql = "SELECT * FROM Teacher";
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.last();
+            int rowCount = rs.getRow();
+            rs.beforeFirst();
+            System.out.println("TID\tTName\tSalary");
+            while (rs.next()) {
+                int tid = rs.getInt("TID");
+                String tname = rs.getString("TName");
+                double salary = rs.getDouble("Salary");
+                System.out.println(tid + "\t" + tname + "\t" + salary);
+            }
+
+            System.out.println("\nTotal rows: " + rowCount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
