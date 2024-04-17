@@ -22,7 +22,8 @@ class Q1
 
 Q2
 import java.util.LinkedList;
-class Q2 {
+
+class ProducerConsumer {
     private LinkedList<Integer> buffer = new LinkedList<>();
     private int capacity = 1; 
 
@@ -40,7 +41,6 @@ class Q2 {
             }
         }
     }
-
     public void consume() throws InterruptedException {
         while (true) {
             synchronized (this) {
@@ -50,16 +50,14 @@ class Q2 {
                 int val = buffer.removeFirst();
                 System.out.println("Consumer consumed: " + val);
                 notify(); 
-                Thread.sleep(1000);
+                Thread.sleep(1000); 
             }
         }
     }
 }
-
 public class Main {
     public static void main(String[] args) {
-        Q2 pc = new Q2();
-
+        ProducerConsumer pc = new ProducerConsumer();
         Thread producerThread = new Thread(() -> {
             try {
                 pc.produce();
