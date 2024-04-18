@@ -1,0 +1,125 @@
+Q1]
+import java.io.*;
+class item
+{
+int id;
+String name;
+float price;
+static int count=0;
+public item()
+{
+ id=0;
+ name=null;
+ price=0.0f;
+}
+public item(int id,String name,float price)
+{
+ this.id=id;
+ this.name=name;
+ this.price=price;
+ count++;
+}
+public static void count()
+{
+ System.out.println("Object "+(count)+" Created");
+}
+public void display()
+{
+ System.out.println("item id: "+id);
+ System.out.println("Name: "+name);
+ System.out.println("price: "+price);
+ System.out.println("------------------------------");
+} 
+public static void main(String [] args)
+{
+item s1=new item(11,"pen",15.00f);
+ item.count();
+ item s2=new item(12,"pencil",25.00f);
+ item.count();
+ item s3=new item(13,"eraser",10.00f);
+ item.count();
+ s1.display();
+ s2.display();
+ s3.display(); 
+}
+}
+
+Q2.
+import java.io.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Donor implements Serializable {
+    private String name;
+    private int age;
+    private String address;
+    private String contactNumber;
+    private String bloodGroup;
+    private LocalDate lastDonationDate;
+
+    public Donor(String name, int age, String address, String contactNumber, String bloodGroup, LocalDate lastDonationDate) {
+        this.name = name;
+        this.age = age;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.bloodGroup = bloodGroup;
+        this.lastDonationDate = lastDonationDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public LocalDate getLastDonationDate() {
+        return lastDonationDate;
+    }
+
+    public static void main(String[] args) {
+        List<Donor> donors = new ArrayList<>();
+        donors.add(new Donor("John Doe", 25, "Pune", "1234567890", "A+", LocalDate.of(2023, 10, 15)));
+        donors.add(new Donor("Jane Smith", 30, "Pune", "9876543210", "B+", LocalDate.of(2022, 12, 5)));
+        donors.add(new Donor("Alice Johnson", 35, "Pune", "5678901234", "A+", LocalDate.of(2023, 3, 20)));
+        writeToFile(donors, "donors.dat");
+        displayFilteredDonors("donors.dat", "A+");
+    }
+
+    private static void writeToFile(List<Donor> donors, String fileName) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            for (Donor donor : donors) {
+                outputStream.writeObject(donor);
+            }
+            System.out.println("Donor details written to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    private static void displayFilteredDonors(String fileName, String bloodGroup) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            System.out.println("Filtered donors (Blood Group: " + bloodGroup + ", Last donation over six months ago):");
+            while (true) {
+                Donor donor = (Donor) inputStream.readObject();
+                if (donor == null) break;
+                if (donor.getBloodGroup().equals(bloodGroup) && isOverSixMonths(donor.getLastDonationDate())) {
+                    System.out.println("Name: " + donor.getName() +
+                            ", Age: " + donor.getAge() +
+                            ", Address: " + donor.getAddress() +
+                            ", Contact Number: " + donor.getContactNumber());
+                }
+            }
+        } catch (EOFException e) {
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error reading from file: " + e.getMessage());
+        }
+    }
+
+    private static boolean isOverSixMonths(LocalDate lastDonationDate) {
+        LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+        return lastDonationDate.isBefore(sixMonthsAgo);
+    }
+}

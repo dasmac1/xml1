@@ -1,0 +1,163 @@
+Q1]
+class continent
+{
+protected String cont;
+void get()
+{
+ cont="asia"; 
+}
+}
+class country extends continent
+{
+ protected String cname;
+ void accept()
+ {
+ cname="India";
+ } 
+}
+CreativeLogics pg. 20
+class state extends country
+{
+ protected String sname;
+ void accept1()
+ {
+ sname="Maharashtra"; 
+} 
+}
+class place extends state
+{
+ String pname;
+ void accept2()
+ {
+ pname="Nashik";
+ } 
+void show()
+{
+ System.out.println("Continent is " +cont);
+ System.out.println("Country is " +cname);
+ System.out.println("State name " +sname);
+ System.out.println("Place is " +pname);
+ }}
+class prog2
+{
+public static void main(String args[])
+CreativeLogics pg. 21
+ {
+ place t=new place();
+ t.get();
+ t.accept();
+ t.accept1(); 
+ t.accept2();
+ t.show();
+ } 
+}
+
+Q2. 
+import java.util.Scanner;
+
+public class MatrixOperations {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Addition");
+            System.out.println("2. Multiplication");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice (1/2/3): ");
+
+            int choice = scanner.nextInt();
+
+            if (choice == 1) {
+                performAddition(scanner);
+            } else if (choice == 2) {
+                performMultiplication(scanner);
+            } else if (choice == 3) {
+                System.out.println("Exiting the program.");
+                break;
+            } else {
+                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void performAddition(Scanner scanner) {
+        System.out.print("Enter the number of rows: ");
+        int rows = scanner.nextInt();
+        System.out.print("Enter the number of columns: ");
+        int cols = scanner.nextInt();
+
+        int[][] matrix1 = new int[rows][cols];
+        int[][] matrix2 = new int[rows][cols];
+
+        System.out.println("Enter elements of first matrix:");
+        readMatrix(scanner, matrix1);
+        System.out.println("Enter elements of second matrix:");
+        readMatrix(scanner, matrix2);
+
+        int[][] result = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                result[i][j] = matrix1[i][j] + matrix2[i][j];
+            }
+        }
+
+        System.out.println("Result:");
+        printMatrix(result);
+    }
+
+    private static void performMultiplication(Scanner scanner) {
+        System.out.print("Enter the number of rows for first matrix: ");
+        int rows1 = scanner.nextInt();
+        System.out.print("Enter the number of columns for first matrix: ");
+        int cols1 = scanner.nextInt();
+        System.out.print("Enter the number of rows for second matrix: ");
+        int rows2 = scanner.nextInt();
+        System.out.print("Enter the number of columns for second matrix: ");
+        int cols2 = scanner.nextInt();
+
+        if (cols1 != rows2) {
+            System.out.println("Error: Number of columns in first matrix must be equal to the number of rows in the second matrix for multiplication.");
+            return;
+        }
+
+        int[][] matrix1 = new int[rows1][cols1];
+        int[][] matrix2 = new int[rows2][cols2];
+
+        System.out.println("Enter elements of first matrix:");
+        readMatrix(scanner, matrix1);
+        System.out.println("Enter elements of second matrix:");
+        readMatrix(scanner, matrix2);
+
+        int[][] result = new int[rows1][cols2];
+        for (int i = 0; i < rows1; i++) {
+            for (int j = 0; j < cols2; j++) {
+                for (int k = 0; k < cols1; k++) {
+                    result[i][j] += matrix1[i][k] * matrix2[k][j];
+                }
+            }
+        }
+
+        System.out.println("Result:");
+        printMatrix(result);
+    }
+
+    private static void readMatrix(Scanner scanner, int[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                matrix[i][j] = scanner.nextInt();
+            }
+        }
+    }
+
+    private static void printMatrix(int[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
